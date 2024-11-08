@@ -1,0 +1,97 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>后台管理</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-900 p-5">
+    <div class="container mx-auto">
+        <h1 class="text-3xl mb-5">后台管理</h1>
+        <div class="mb-5">
+            <label for="rowSelect" class="block text-lg mb-2">选择排:</label>
+            <select id="rowSelect" class="border border-gray-300 p-2 w-full">
+                <option value="1">第一排</option>
+                <option value="2">第二排</option>
+                <option value="3">第三排</option>
+                <option value="new">新增排</option>
+            </select>
+        </div>
+        <div id="formContainer" class="hidden">
+            <h2 class="text-2xl mb-3">编辑内容</h2>
+            <form id="contentForm" class="space-y-4">
+                <div>
+                    <label for="vendor" class="block text-lg mb-1">厂商:</label>
+                    <input type="text" id="vendor" class="border border-gray-300 p-2 w-full">
+                </div>
+                <div>
+                    <label for="type" class="block text-lg mb-1">类型:</label>
+                    <input type="text" id="type" class="border border-gray-300 p-2 w-full">
+                </div>
+                <div>
+                    <label for="issue" class="block text-lg mb-1">问题内容:</label>
+                    <textarea id="issue" class="border border-gray-300 p-2 w-full"></textarea>
+                </div>
+                <div>
+                    <label for="screenshot" class="block text-lg mb-1">截图:</label>
+                    <input type="text" id="screenshot" class="border border-gray-300 p-2 w-full">
+                </div>
+                <div>
+                    <label for="discoveryTime" class="block text-lg mb-1">发现时间:</label>
+                    <input type="date" id="discoveryTime" class="border border-gray-300 p-2 w-full">
+                </div>
+                <div>
+                    <label for="isFixed" class="block text-lg mb-1">是否已修复:</label>
+                    <select id="isFixed" class="border border-gray-300 p-2 w-full">
+                        <option value="yes">是</option>
+                        <option value="no">否</option>
+                    </select>
+                </div>
+                <button type="button" id="submitButton" class="bg-blue-500 text-white p-2 rounded">上传</button>
+            </form>
+        </div>
+    </div>
+    <script>
+        document.getElementById('rowSelect').addEventListener('change', function() {
+            const formContainer = document.getElementById('formContainer');
+            formContainer.classList.remove('hidden');
+        });
+
+        document.getElementById('submitButton').addEventListener('click', function() {
+            const row = document.getElementById('rowSelect').value;
+            const vendor = document.getElementById('vendor').value;
+            const type = document.getElementById('type').value;
+            const issue = document.getElementById('issue').value;
+            const screenshot = document.getElementById('screenshot').value;
+            const discoveryTime = document.getElementById('discoveryTime').value;
+            const isFixed = document.getElementById('isFixed').value;
+
+            const data = {
+                row,
+                vendor,
+                type,
+                issue,
+                screenshot,
+                discoveryTime,
+                isFixed
+            };
+
+            fetch('http://localhost:3000/update', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('上传成功');
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
+</body>
+</html>
